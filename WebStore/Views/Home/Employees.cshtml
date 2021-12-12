@@ -22,11 +22,14 @@
                 @foreach(var employee in Model)
                 {
                     <tr>
-                        <th>@employee.Id</th>
-                        <th>@employee.FirstName</th>
-                        <th>@employee.LastName</th>
-                        <th>@employee.Patronymic</th>
-                        <th>@employee.Age</th>
+                        <td>@employee.Id</td>
+                        <td>@employee.FirstName</td>
+                        <td>@employee.LastName</td>
+                        <td>@employee.Patronymic</td>
+                        <td>@employee.Age</td>
+                        <td>
+                            <a href="~/home/employee/@employee.Id">инфо о @employee.Id</a>
+                        </td>
                     </tr>
                 }
         </tbody>
