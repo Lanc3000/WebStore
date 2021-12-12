@@ -6,7 +6,13 @@ namespace WebStore.Controllers
     {
         public IActionResult Index()
         {
-            return Content("Hello from controller!");
+            //return Content("Hello from controller!");
+            return View();
+        }
+
+        public string ConfiguredAction(string id)
+        {
+            return $"akdgja - {id}";
         }
     }
 }
