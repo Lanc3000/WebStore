@@ -1,14 +1,11 @@
 ﻿@model WebStore.Models.Employee
 
-<!DOCTYPE html>
-
-<head>
-    <title>Карточка сотрудника</title>
-</head>
-<body>
-    <h3>Фамилия: @Model.FirstName</h3>
-    <h3>Имя: @Model.LastName</h3>
-    <h3>Отчество: @Model.Patronymic</h3>
-    <h3>Возраст: @Model.Age</h3>
-
-</body>
+@{
+    ViewData["Title"] = "Карточка сотрудника";
+}
+    <h3>Сотрудник</h3>
+    <p>Фамилия: @Model.FirstName</p>
+    <p>Имя: @Model.LastName</p>
+    <p>Отчество: @Model.Patronymic</p>
+    <p>Возраст: @Model.Age</p>
+    <a href=~/Home/employees>К списку сотрудников</a>
