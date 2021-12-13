@@ -30,7 +30,7 @@ namespace WebStore.Controllers
         
         public IActionResult Employee(int id)
         {
-            return View(_employees[id]);
+            return View(_employees[id - 1]);
         }
     }
 }
