@@ -7,5 +7,8 @@ public class Employee
     public string FirstName { get; set; }
     public string Patronymic { get; set; }
     public int Age { get; set; }
+    public decimal Salary { get; set; }
+    public Company Company { get; set; }
+    public int CompanyID { get; set; }
 }
 
