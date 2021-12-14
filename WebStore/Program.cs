@@ -14,6 +14,9 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
+//app.UseStaticFiles(new StaticFileOptions { ServeUnknownFileTypes = true}); 
+app.UseStaticFiles();
+
 app.UseRouting();
 //Загрузка информации из файла конфигурации
 //var configuration = app.Configuration;
