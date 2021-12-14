@@ -15,15 +15,12 @@
     <![endif]-->       
     <link rel="shortcut icon" href="images/ico/favicon.ico">
 </head><!--/head-->
-
-<body>
-    
+<body> 
     @await Html.PartialAsync("Partial/_Header")
     
     @RenderBody()
     
     <partial Name="Partial/_Footer"/>
     <partial Name="Partial/_Scripts"/>  
-
 </body>
 </html>
