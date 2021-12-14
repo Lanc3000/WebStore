@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
 services.AddControllersWithViews();
-services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+//services.AddTransient<IEmployeeRepository, EmployeeRepository>();
 
 var app = builder.Build();
 
