@@ -3,8 +3,9 @@
 @{
     ViewData["Title"] = "Сотрудники";
 }
-<h3>Список сотрудников:</h3>
-<table>
+<div class="container">
+    <h3>Список сотрудников:</h3>
+<table class="table">
     <thead>
     <tr>
         <th>Id</th>
@@ -24,7 +25,7 @@
                 <td>@employee.Patronymic</td>
                 <td>@employee.Age</td>
                 <td>
-                    <a href="~/home/employee/@employee.Id">инфо о @employee.Id</a>
+                    <a asp-action="Details" asp-route-Id="@employee.Id">инфо о @employee.Id</a>
                 </td>
             </tr>
         }
@@ -33,4 +34,6 @@
         
 <hr />
 
-<a href="/home/index">На главную</a>
+<a asp-controller="Home" asp-action="Index">На главную</a>
+</div>
+
