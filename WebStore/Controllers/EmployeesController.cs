@@ -23,6 +23,8 @@ namespace WebStore.Controllers
             if (employee is null)
                 return NotFound();
 
+            ViewBag.SelectedEmployee = employee;
+
             return View(employee);
         }
     }
