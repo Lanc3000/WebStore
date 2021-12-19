@@ -2,9 +2,14 @@
 
 namespace WebStore.Controllers;
 
-public class BlogController : Controller
+public class BlogsController : Controller
 {
     public IActionResult Index()
+    {
+        return View();
+    }
+
+    public IActionResult Details()
     {
         return View();
     }
