@@ -1,10 +1,16 @@
+using WebStore.Infrastructure.Conventions;
 using WebStore.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var services = builder.Services;
 
-services.AddControllersWithViews();
+services.AddControllersWithViews(opt =>
+{
+    opt.Conventions.Add(new TestConvention());   
+});
+//services.AddMvc();
+//services.AddControllers(); WebApi
 //services.AddTransient<IEmployeeRepository, EmployeeRepository>();
 
 var app = builder.Build();
