@@ -7,12 +7,11 @@ namespace WebStore.Controllers
     //[Route("Staff/{action=Index}/{Id?}")]
     public class EmployeesController : Controller
     {
-        private static readonly List<Employee> __Employees = new()
+        private ICollection<Employee> __Employees;
+        public EmployeesController(ICollection<Employee> employees)
         {
-            new Employee { Id = 1, FirstName = "Иванов", LastName = "Иван", Patronymic = "Иванович", Age = 27, Salary = 120000 },
-            new Employee { Id = 2, FirstName = "Петров", LastName = "Петр", Patronymic = "Александрович", Age = 24, Salary = 100000 },
-            new Employee { Id = 3, FirstName = "Сидоров", LastName = "Владимир", Patronymic = "Юрьевич", Age = 36, Salary = 350000 }
-        };
+            __Employees = employees;
+        }
         public IActionResult Index()
         {          
             return View(__Employees);
