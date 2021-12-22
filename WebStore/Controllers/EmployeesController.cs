@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebStore.Models;
+using WebStore.ViewModels;
 
 namespace WebStore.Controllers
 {
@@ -29,5 +30,33 @@ namespace WebStore.Controllers
 
             return View(employee);
         }
+
+        //public IActionResult Create() => View();
+
+        public IActionResult Update(int id) 
+        {
+            var employee = __Employees.FirstOrDefault(x => x.Id == id);
+            if (employee is null)
+                return NotFound();
+
+            var model = new EmployeeUpdateViewModel
+            {
+                Id = employee.Id,
+                LastName = employee.LastName,
+                Name = employee.FirstName,
+                Patronomic = employee.Patronymic,
+                Age = employee.Age,
+            };
+
+            return View(model);
+        }
+
+        public IActionResult Update(EmployeeUpdateViewModel Model) 
+        {
+            // Обработка модели
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Delete(int id) => View();
     }
 }
