@@ -33,7 +33,7 @@ namespace WebStore.Controllers
 
         //public IActionResult Create() => View();
 
-        public IActionResult Update(int id) 
+        public IActionResult Edit(int id) 
         {
             var employee = __Employees.FirstOrDefault(x => x.Id == id);
             if (employee is null)
@@ -51,7 +51,7 @@ namespace WebStore.Controllers
             return View(model);
         }
 
-        public IActionResult Update(EmployeeUpdateViewModel Model) 
+        public IActionResult Edit(EmployeeUpdateViewModel Model) 
         {
             // Обработка модели
             return RedirectToAction("Index");
