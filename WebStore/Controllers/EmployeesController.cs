@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebStore.Models;
+using WebStore.Services.Abstract;
 using WebStore.ViewModels;
 
 namespace WebStore.Controllers
@@ -8,20 +9,20 @@ namespace WebStore.Controllers
     //[Route("Staff/{action=Index}/{Id?}")]
     public class EmployeesController : Controller
     {
-        private ICollection<Employee> __Employees;
-        public EmployeesController(ICollection<Employee> employees)
+        private readonly IEmployeesData _EmployeesData;
+        public EmployeesController(IEmployeesData EmployeesData)
         {
-            __Employees = employees;
+            _EmployeesData = EmployeesData;
         }
         public IActionResult Index()
-        {          
-            return View(__Employees);
+        {    
+            return View(_EmployeesData.GetAll());
         }
 
         //[Route("~/employees/info-{id}")]
         public IActionResult Details(int Id)
         {
-            var employee = __Employees.FirstOrDefault(x => x.Id == Id);
+            var employee = _EmployeesData.GetById(Id);
 
             if (employee is null)
                 return NotFound();
@@ -33,9 +34,10 @@ namespace WebStore.Controllers
 
         //public IActionResult Create() => View();
 
+        [HttpGet]
         public IActionResult Edit(int id) 
         {
-            var employee = __Employees.FirstOrDefault(x => x.Id == id);
+            var employee = _EmployeesData.GetById(id);
             if (employee is null)
                 return NotFound();
 
@@ -50,13 +52,27 @@ namespace WebStore.Controllers
 
             return View(model);
         }
-
+        [HttpPost]
         public IActionResult Edit(EmployeeUpdateViewModel Model) 
         {
-            // Обработка модели
+            var employee = new Employee
+            {
+                Id = Model.Id,
+                LastName = Model.LastName,
+                FirstName = Model.Name,
+                Patronymic = Model.Patronomic,
+                Age = Model.Age,
+            };
+
+            if (!_EmployeesData.Edit(employee))
+                return NotFound();
+
             return RedirectToAction("Index");
         }
 
-        public IActionResult Delete(int id) => View();
+        public IActionResult Delete(int id) 
+        {
+            return View();
+        }
     }
 }

@@ -25,7 +25,9 @@
                 <td>@employee.Patronymic</td>
                 <td>@employee.Age</td>
                 <td>
-                    <a asp-action="Details" asp-route-Id="@employee.Id">инфо о @employee.Id</a>
+                    <a asp-action="Details" asp-route-Id="@employee.Id">инфо.</a>
+                    <a asp-action="Edit" asp-route-Id="@employee.Id">редакт.</a>
+                    
                 </td>
             </tr>
         }
