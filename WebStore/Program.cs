@@ -1,6 +1,8 @@
 using WebStore.Infrastructure.Conventions;
 using WebStore.Infrastructure.Middleware;
 using WebStore.Models;
+using WebStore.Services;
+using WebStore.Services.Abstract;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,8 @@ var services = builder.Services;
 //services.AddControllers(); WebApi
 //services.AddTransient<IEmployeeRepository, EmployeeRepository>();
 services.AddControllersWithViews();
+
+services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
 
 var app = builder.Build();
 
