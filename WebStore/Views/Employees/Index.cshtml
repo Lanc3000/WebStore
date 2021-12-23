@@ -8,26 +8,35 @@
 <table class="table">
     <thead>
     <tr>
+         <th></th>
         <th>Id</th>
         <th>Фамилия</th>
         <th>Имя</th>
         <th>Отчество</th>
         <th>Возраст</th>
+        <th></th>
     </tr>
     </thead>
     <tbody>
         @foreach(var employee in Model)
         {
             <tr>
+                <td>
+                    <a asp-action="Details" asp-route-Id="@employee.Id">инфо.</a>
+                    <a asp-action="Edit" asp-route-Id="@employee.Id">редакт.</a>
+                </td>
                 <td>@employee.Id</td>
                 <td>@employee.FirstName</td>
                 <td>@employee.LastName</td>
                 <td>@employee.Patronymic</td>
                 <td>@employee.Age</td>
                 <td>
-                    <a asp-action="Details" asp-route-Id="@employee.Id">инфо.</a>
-                    <a asp-action="Edit" asp-route-Id="@employee.Id">редакт.</a>
-                    
+                    <a asp-action="Delete" asp-route-Id="@employee.Id" class="text-danger">
+                        Удалить<i class="fa fa-trash-o"></i> @*не отображается иконка!*@
+                    </a> 
+                    <form asp-action="DeleteConfirmed" asp-route="@employee.Id">
+                        <input type="submit" value="DD" class="btn btn-sm btn-danger"/>
+                    </form>
                 </td>
             </tr>
         }

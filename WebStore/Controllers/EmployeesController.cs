@@ -41,26 +41,26 @@ namespace WebStore.Controllers
             if (employee is null)
                 return NotFound();
 
-            var model = new EmployeeUpdateViewModel
+            var model = new EmployeeViewModel
             {
                 Id = employee.Id,
                 LastName = employee.LastName,
                 Name = employee.FirstName,
-                Patronomic = employee.Patronymic,
+                Patronymic = employee.Patronymic,
                 Age = employee.Age,
             };
 
             return View(model);
         }
         [HttpPost]
-        public IActionResult Edit(EmployeeUpdateViewModel Model) 
+        public IActionResult Edit(EmployeeViewModel Model) 
         {
             var employee = new Employee
             {
                 Id = Model.Id,
                 LastName = Model.LastName,
                 FirstName = Model.Name,
-                Patronymic = Model.Patronomic,
+                Patronymic = Model.Patronymic,
                 Age = Model.Age,
             };
 
@@ -72,7 +72,31 @@ namespace WebStore.Controllers
 
         public IActionResult Delete(int id) 
         {
-            return View();
+            if (id < 0)
+                return BadRequest();
+
+            var employee = _EmployeesData.GetById(id);
+            if (employee is null)
+                return NotFound();
+
+            var model = new EmployeeViewModel
+            {
+                Id = employee.Id,
+                LastName = employee.LastName,
+                Name = employee.FirstName,
+                Patronymic = employee.Patronymic,
+                Age = employee.Age,
+            };
+
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            if (!_EmployeesData.Delete(id))
+                return NotFound();
+
+            return RedirectToAction("Index");
         }
     }
 }
