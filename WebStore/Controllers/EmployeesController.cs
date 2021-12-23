@@ -10,9 +10,12 @@ namespace WebStore.Controllers
     public class EmployeesController : Controller
     {
         private readonly IEmployeesData _EmployeesData;
-        public EmployeesController(IEmployeesData EmployeesData)
+        private readonly ILogger<EmployeesController> _logger;
+        public EmployeesController(IEmployeesData EmployeesData, 
+            ILogger<EmployeesController> logger)
         {
             _EmployeesData = EmployeesData;
+            _logger = logger;
         }
         public IActionResult Index()
         {    
@@ -42,7 +45,11 @@ namespace WebStore.Controllers
 
             var employee = _EmployeesData.GetById((int)id);
             if (employee is null)
+            {
+                _logger.LogWarning("Попытка редактирования сотрудника с Id:{0} - сотрудник отсутствует", employee.Id);
                 return NotFound();
+            }
+                
 
             var model = new EmployeeViewModel
             {
@@ -68,9 +75,17 @@ namespace WebStore.Controllers
             };
 
             if (Model.Id == 0)
+            {
                 _EmployeesData.Add(employee);
+                _logger.LogInformation("Создан сотрудник {0}", employee);
+            }
             else if (!_EmployeesData.Edit(employee))
+            { 
+                _logger.LogInformation("Информация о сотруднике {0} изменена", employee);
                 return NotFound();
+
+
+            }
 
             return RedirectToAction("Index");
         }
@@ -93,6 +108,7 @@ namespace WebStore.Controllers
                 Age = employee.Age,
             };
 
+
             return View(model);
         }
         [HttpPost]
@@ -100,6 +116,8 @@ namespace WebStore.Controllers
         {
             if (!_EmployeesData.Delete(id))
                 return NotFound();
+
+            _logger.LogWarning("Удалён сотрудник с id{0}", id);
 
             return RedirectToAction("Index");
         }
