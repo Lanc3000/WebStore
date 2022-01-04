@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace WebStore.ViewModels;
-public class EmployeeViewModel
+public class EmployeeViewModel : IValidatableObject
 {
     [HiddenInput(DisplayValue = false)]
     public int Id { get; set; }
@@ -27,5 +27,12 @@ public class EmployeeViewModel
     [Display(Name = "Возраст")]
     [Range(18, 80, ErrorMessage = "Возраст должен быть от 18 до 80 лет")]
     public int Age { get; set; }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext Context)
+    {
+        if (LastName.Length > 100)
+            yield return new ValidationResult("Длина фамилии больше 100 символов!");
+        yield return ValidationResult.Success!;
+    }
 }
 
