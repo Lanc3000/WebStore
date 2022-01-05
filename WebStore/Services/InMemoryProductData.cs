@@ -17,10 +17,10 @@ public class InMemoryProductData : IProductData
         //if (Filters?.SectionId != null)
         //    query = query.Where(x => x.SectionId == Filters.SectionId);
 
-        if (Filters is { SectionId: var section_id }) // сахар из C#9
+        if (Filters?.SectionId is { } section_id) // сахар из C#9
             query = query.Where(x => x.SectionId == section_id);
 
-        if (Filters is { BrandId: var brand_id })
+        if (Filters?.BrandId is { } brand_id)
             query = query.Where(x => x.BrandId == brand_id);
 
         return query;
