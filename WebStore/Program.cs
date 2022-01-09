@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using WebStore.DAL.Context;
 using WebStore.Infrastructure.Conventions;
 using WebStore.Infrastructure.Middleware;
 using WebStore.Models;
@@ -18,6 +20,8 @@ var services = builder.Services;
 //services.AddTransient<IEmployeeRepository, EmployeeRepository>();
 services.AddControllersWithViews();
 
+services.AddDbContext<WebStoreDB>(opt => 
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
 services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
 services.AddSingleton<IProductData, InMemoryProductData>();
 
