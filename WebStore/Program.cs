@@ -21,7 +21,8 @@ var services = builder.Services;
 services.AddControllersWithViews();
 
 services.AddDbContext<WebStoreDB>(opt => 
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
+
 services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
 services.AddSingleton<IProductData, InMemoryProductData>();
 
