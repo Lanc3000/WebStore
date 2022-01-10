@@ -73,6 +73,8 @@ public class DbInitializer : IDbInitializer
 
             //включаем проверку обратно
             await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Sections] OFF", Cancel);
+
+            await _db.Database.CommitTransactionAsync(Cancel);
         }
 
         _Logger.LogInformation("Добавление брендов в БД...");
@@ -84,6 +86,8 @@ public class DbInitializer : IDbInitializer
             await _db.SaveChangesAsync(Cancel);
 
             await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Brands] OFF", Cancel);
+
+            await _db.Database.CommitTransactionAsync(Cancel);
         }
 
         _Logger.LogInformation("Добавление товаров в БД...");
@@ -95,6 +99,8 @@ public class DbInitializer : IDbInitializer
             await _db.SaveChangesAsync(Cancel);
 
             await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Products] OFF", Cancel);
+
+            await _db.Database.CommitTransactionAsync(Cancel);
         }
 
         _Logger.LogInformation("Инициализация тестовых данных БД выполнена успешно!");

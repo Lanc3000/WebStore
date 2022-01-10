@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WebStore.DAL.Context;
-using WebStore.Infrastructure.Conventions;
 using WebStore.Infrastructure.Middleware;
-using WebStore.Models;
 using WebStore.Services;
 using WebStore.Services.Abstract;
 using WebStore.Services.Interfaces;
@@ -20,13 +18,20 @@ var services = builder.Services;
 //services.AddTransient<IEmployeeRepository, EmployeeRepository>();
 services.AddControllersWithViews();
 
-services.AddDbContext<WebStoreDB>(opt => 
+services.AddDbContext<WebStoreDB>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
+services.AddTransient<IDbInitializer, DbInitializer>();
 
 services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
 services.AddSingleton<IProductData, InMemoryProductData>();
 
-var app = builder.Build();
+var app = builder.Build(); // Сборка приложения
+
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var db_initializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+    await db_initializer.InitializeAsync(RemoveBefore: false);
+}
 
 if (app.Environment.IsDevelopment())
 {
