@@ -3,6 +3,7 @@ using WebStore.DAL.Context;
 using WebStore.Infrastructure.Middleware;
 using WebStore.Services;
 using WebStore.Services.Abstract;
+using WebStore.Services.InSQL;
 using WebStore.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,8 +23,9 @@ services.AddDbContext<WebStoreDB>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
 services.AddTransient<IDbInitializer, DbInitializer>();
 
-services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
-services.AddSingleton<IProductData, InMemoryProductData>();
+//services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
+//services.AddSingleton<IProductData, InMemoryProductData>();
+services.AddScoped<IProductData, SqlProductData>();
 
 var app = builder.Build(); // Сборка приложения
 
