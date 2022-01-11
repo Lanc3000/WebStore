@@ -5,6 +5,7 @@ using WebStore.Services.Interfaces;
 
 namespace WebStore.Services.InMemory;
 
+[Obsolete("Используйте класс WEbStore.Services.InSQL.SqlProductData")]
 public class InMemoryProductData : IProductData
 {
     public IEnumerable<Brand> GetBrands() => TestData.Brands;
