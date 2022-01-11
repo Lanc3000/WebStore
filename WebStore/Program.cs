@@ -26,6 +26,7 @@ services.AddTransient<IDbInitializer, DbInitializer>();
 //services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
 //services.AddSingleton<IProductData, InMemoryProductData>();
 services.AddScoped<IProductData, SqlProductData>();
+services.AddScoped<IEmployeesData, SqlEmployeeData>();
 
 var app = builder.Build(); // Сборка приложения
 
