@@ -3,6 +3,7 @@ using WebStore.Infrastructure.Middleware;
 using WebStore.Models;
 using WebStore.Services;
 using WebStore.Services.Abstract;
+using WebStore.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,7 @@ var services = builder.Services;
 services.AddControllersWithViews();
 
 services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
+services.AddSingleton<IProductData, InMemoryProductData>();
 
 var app = builder.Build();
 
