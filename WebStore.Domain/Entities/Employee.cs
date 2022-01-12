@@ -10,7 +10,6 @@ public class Employee : IEntity, IOrderedEntity
     public string Patronymic { get; set; }
     public int Age { get; set; }
     public decimal Salary { get; set; }
-    public int CompanyID { get; set; }
     public int Order { get; set; }
 }
 
