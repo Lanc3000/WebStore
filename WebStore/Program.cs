@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebStore.DAL.Context;
+using WebStore.Domain.Entities.Identity;
 using WebStore.Infrastructure.Middleware;
 using WebStore.Services;
 using WebStore.Services.Abstract;
@@ -22,6 +24,42 @@ services.AddControllersWithViews();
 services.AddDbContext<WebStoreDB>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
 services.AddTransient<IDbInitializer, DbInitializer>();
+
+
+services.AddIdentity<User, Role>()
+    .AddEntityFrameworkStores<WebStoreDB>()
+    .AddDefaultTokenProviders();
+
+services.Configure<IdentityOptions>(opt => 
+{
+#if DEBUG
+    opt.Password.RequireDigit = false;
+    opt.Password.RequireLowercase = false;
+    opt.Password.RequireUppercase = false;
+    opt.Password.RequireNonAlphanumeric = false;
+    opt.Password.RequiredLength = 3;
+    opt.Password.RequiredUniqueChars = 3;
+#endif
+    opt.User.RequireUniqueEmail = false;
+    opt.User.AllowedUserNameCharacters = "abcdefghijklmnoprstuvwxyzABCDEFGHIJKLMNOPRSTUVWXYZ123456789";
+    opt.Lockout.AllowedForNewUsers = false;
+    opt.Lockout.MaxFailedAccessAttempts = 10;
+    opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+});
+
+services.ConfigureApplicationCookie(opt =>
+{
+    opt.Cookie.Name = "WebStore.GB";
+    opt.Cookie.HttpOnly = true;
+
+    opt.Cookie.Expiration = TimeSpan.FromDays(10);
+
+    opt.LoginPath = "/Accaunt/Login";
+    opt.LogoutPath = "/Accaunt/Logout";
+    opt.AccessDeniedPath = "/Accaunt/AccessDenied";
+
+    opt.SlidingExpiration = true;
+});
 
 //services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
 //services.AddSingleton<IProductData, InMemoryProductData>();
@@ -46,6 +84,9 @@ if (app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseMiddleware<TestMiddleware>(); // добаление промежуточного ПО более сложный способ
 
