@@ -71,7 +71,11 @@ public class AccauntController : Controller
 
         return View(Model);
     }
-    
-    public IActionResult Logout() => RedirectToAction("Index", "HomeController");
+
+    public async Task<IActionResult> Logout() 
+    {
+        await _signInManager.SignOutAsync();
+        return RedirectToAction("Index", "HomeController");
+    }  
     public IActionResult AccessDenied() => View();
 }
