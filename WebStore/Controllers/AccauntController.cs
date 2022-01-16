@@ -31,7 +31,7 @@ public class AccauntController : Controller
         var registration_result = await _userManager.CreateAsync(user, Model.Password);
         if (registration_result.Succeeded)
         {
-            await _signInManager.SignInAsync(user, false);
+            await _signInManager.SignInAsync(user, false).ConfigureAwait(true);
 
             return RedirectToAction("Index", "Home");
         }
