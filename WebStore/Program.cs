@@ -52,7 +52,8 @@ services.ConfigureApplicationCookie(opt =>
     opt.Cookie.Name = "WebStore.GB";
     opt.Cookie.HttpOnly = true;
 
-    opt.Cookie.Expiration = TimeSpan.FromDays(10);
+    opt.ExpireTimeSpan = TimeSpan.FromDays(10);
+    // opt.Cookie.Expiration = TimeSpan.FromDays(10); - устарел и больше не используется
 
     opt.LoginPath = "/Accaunt/Login";
     opt.LogoutPath = "/Accaunt/Logout";
