@@ -4,6 +4,7 @@ using WebStore.Services.Abstract;
 
 namespace WebStore.Services.InMemory;
 
+[Obsolete("Используйте SqlEmployeeData")]
 public class InMemoryEmployeesData : IEmployeesData
 {
     private ICollection<Employee> _Employees;
