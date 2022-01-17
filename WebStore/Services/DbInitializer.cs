@@ -63,46 +63,46 @@ public class DbInitializer : IDbInitializer
 
         _Logger.LogInformation("Инициализация тестовых данных БД...");
 
-        _Logger.LogInformation("Добавление секции в БД...");
+        var sections_pool = TestData.Sections.ToDictionary(x => x.Id);
+        var brands_pool = TestData.Brands.ToDictionary(x => x.Id);
+
+        foreach (var child_section in TestData.Sections.Where(x => x.ParentId is not null))
+        {
+            child_section.Parent = sections_pool[(int)child_section.ParentId!];
+        }
+        foreach (var product in TestData.Products)
+        {
+            product.Section = sections_pool[product.SectionId];
+            if (product.BrandId is { } brand_id)
+                product.Brand = brands_pool[brand_id];
+
+            product.Id = 0;
+            product.SectionId = 0;
+            product.BrandId = null;
+        }
+
+        foreach (var section in TestData.Sections)
+        {
+            section.Id = 0;
+            section.ParentId = null;
+        }
+
+        foreach (var brand in TestData.Brands)
+        {
+            brand.Id = 0; 
+        }
+
         await using (await _db.Database.BeginTransactionAsync(Cancel)) 
         {
             await _db.Sections.AddRangeAsync(TestData.Sections, Cancel);
-            // отключаем проверку БД наличия первичных ключей в нашем списке Sections (т.к. добавили их в список вручную)
-            await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Sections] ON", Cancel);
-           
-            await _db.SaveChangesAsync(Cancel);
-
-            //включаем проверку обратно
-            await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Sections] OFF", Cancel);
-
-            await _db.Database.CommitTransactionAsync(Cancel);
-        }
-
-        _Logger.LogInformation("Добавление брендов в БД...");
-        await using (await _db.Database.BeginTransactionAsync(Cancel))
-        {
             await _db.Brands.AddRangeAsync(TestData.Brands, Cancel);
-            await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Brands] ON", Cancel);
-
-            await _db.SaveChangesAsync(Cancel);
-
-            await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Brands] OFF", Cancel);
-
-            await _db.Database.CommitTransactionAsync(Cancel);
-        }
-
-        _Logger.LogInformation("Добавление товаров в БД...");
-        await using (await _db.Database.BeginTransactionAsync(Cancel))
-        {
             await _db.Products.AddRangeAsync(TestData.Products, Cancel);
-            await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Products] ON", Cancel);
 
             await _db.SaveChangesAsync(Cancel);
 
-            await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Products] OFF", Cancel);
-
             await _db.Database.CommitTransactionAsync(Cancel);
         }
+
         _Logger.LogInformation("Инициализация тестовых данных БД выполнена успешно!");
     }
 
