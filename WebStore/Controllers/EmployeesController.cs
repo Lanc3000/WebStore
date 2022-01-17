@@ -41,7 +41,7 @@ namespace WebStore.Controllers
         public IActionResult Create() => View("Edit", new EmployeeViewModel());
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public IActionResult Edit(int? id) 
         {
             if (id is null)
@@ -67,7 +67,7 @@ namespace WebStore.Controllers
             return View(model);
         }
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public IActionResult Edit(EmployeeViewModel Model) 
         {
             if (Model.LastName == "Асама" && Model.Name == "Бен" && Model.Patronymic == "Ладен")
@@ -101,7 +101,7 @@ namespace WebStore.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public IActionResult Delete(int id) 
         {
             if (id < 0)
@@ -124,7 +124,7 @@ namespace WebStore.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult DeleteConfirmed(int id)
         {

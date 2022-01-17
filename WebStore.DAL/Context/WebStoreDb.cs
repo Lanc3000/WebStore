@@ -25,5 +25,9 @@ public class WebStoreDB : IdentityDbContext<User, Role, string>
         //    .HasMany(section => section.Products)
         //    .WithOne(product => product.Section)
         //    .OnDelete(DeleteBehavior.Cascade);
+
+
+        // mB.Entity<Employee>().HasData можно добавить сразу сотрудников
+
     }
 }
