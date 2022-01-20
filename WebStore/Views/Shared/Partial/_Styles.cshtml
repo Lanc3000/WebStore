@@ -1,8 +1,17 @@
 ﻿<link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="~/lib/font-awesomt/css/font-awesome.min.css" rel="stylesheet">
 <link href="~/css/prettyPhoto.css" rel="stylesheet">
-<link href="~/css/price-range.css" rel="stylesheet">
-<link href="~/css/animate.css" rel="stylesheet">
-<link href="~/css/main.css" rel="stylesheet">
-<link href="~/css/responsive.css" rel="stylesheet">
+
+@*специальный таг хелпер для разделения кода выполянемого при разработке и выполнеямого после релиза*@
+<environment include="Development">
+    <link href="~/css/price-range.css" rel="stylesheet">
+    <link href="~/css/animate.css" rel="stylesheet">
+    <link href="~/css/main.css" rel="stylesheet" asp-append-version="true">
+    <link href="~/css/responsive.css" rel="stylesheet" asp-append-version="true">
+</environment>
    
+<environment exclude="Development">
+    <link href="~/css/~/css/site.min.css" rel="stylesheet" asp-append-version="true">
+</environment>
+
+@*asp-append-version оповещает браузер что файл изменился*@
