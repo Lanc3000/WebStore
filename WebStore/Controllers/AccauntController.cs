@@ -28,9 +28,12 @@ public class AccauntController : Controller
             UserName = Model.UserName,
         };
 
-        var registration_result = await _userManager.CreateAsync(user, Model.Password);
+        var registration_result = await _userManager.CreateAsync(user, Model.Password).ConfigureAwait(true);
+
         if (registration_result.Succeeded)
         {
+            await _userManager.AddToRoleAsync(user, Role.Users).ConfigureAwait(true);
+
             await _signInManager.SignInAsync(user, false).ConfigureAwait(true);
 
             return RedirectToAction("Index", "Home");
@@ -53,7 +56,7 @@ public class AccauntController : Controller
             Model.UserName,
             Model.Password,
             Model.RememberMe,
-            true);
+            true).ConfigureAwait(true);
 
         if (login_result.Succeeded)
         {
@@ -74,7 +77,7 @@ public class AccauntController : Controller
 
     public async Task<IActionResult> Logout() 
     {
-        await _signInManager.SignOutAsync();
+        await _signInManager.SignOutAsync().ConfigureAwait(true);
         return RedirectToAction("Index", "HomeController");
     }  
     public IActionResult AccessDenied() => View();
