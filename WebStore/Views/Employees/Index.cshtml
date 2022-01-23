@@ -1,4 +1,5 @@
-﻿@model IEnumerable<WebStore.Domain.Entities.Employee>
+﻿@using WebStore.Domain.Entities.Identity
+@model IEnumerable<WebStore.Domain.Entities.Employee>
 
 @{
     ViewData["Title"] = "Сотрудники";
@@ -6,8 +7,15 @@
 }
 
 <h3>Список сотрудников:</h3>
-<a class="btn btn-default" asp-action="Edit">Создать</a>
-<a class="btn btn-default" asp-action="Create">Создать2</a>
+
+@if (User.IsInRole(Role.Administrators))
+{
+    <a class="btn btn-default" asp-action="Edit">Создать</a>
+    <br/>
+    <a class="btn btn-default" asp-action="Create">Создать2</a>
+}
+
+
 @if (Model.Any())
 {
     <table class="table">
@@ -19,7 +27,10 @@
         <th>@Html.DisplayNameFor(m => m.FirstName)</th>
         <th>@Html.DisplayNameFor(m => m.Patronymic)</th>
         <th>@Html.DisplayNameFor(m => m.Age)</th>
-        <th></th>
+        @if (User.IsInRole(Role.Administrators))
+        {
+            <th></th>                   
+        }
     </tr>
     </thead>
     <tbody>
@@ -28,21 +39,27 @@
             <tr>
                 <td>
                     <a asp-action="Details" asp-route-Id="@employee.Id">инфо.</a>
-                    <a asp-action="Edit" asp-route-Id="@employee.Id">редакт.</a>
+                    @if (User.IsInRole(Role.Administrators))
+                    {
+                        <a asp-action="Edit" asp-route-Id="@employee.Id">редакт.</a>                         
+                    }
                 </td>
                 <td>@employee.Id</td>
                 <td>@employee.FirstName</td>
                 <td>@employee.LastName</td>
                 <td>@employee.Patronymic</td>
                 <td>@employee.Age</td>
-                <td>
+                @if (User.IsInRole(Role.Administrators))
+                {
+                    <td>
                     <a asp-action="Delete" asp-route-Id="@employee.Id" class="text-danger">
                         Удалить<i class="fa fa-trash-o"></i> @*не отображается иконка!*@
                     </a> 
                     <form asp-action="DeleteConfirmed" asp-route-id="@employee.Id">
                         <input type="submit" value="DD" class="btn btn-sm btn-danger"/>
                     </form>
-                </td>
+                    </td>
+                }              
             </tr>
         }
     </tbody>
