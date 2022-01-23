@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 using WebStore.Domain;
 using WebStore.Mapping;
 using WebStore.Services.Interfaces;
@@ -40,7 +41,11 @@ public class CatalogController : Controller
     public IActionResult Details(int id)
     {
         var product = _ProductData.GetProductById(id);
-
+        
+        //CultureInfo.CurrentUICulture = 
+        //    CultureInfo.CurrentCulture = 
+        //        CultureInfo.GetCultureInfo("ru-Ru");
+        
         if (product is null)
             return NotFound();
 
