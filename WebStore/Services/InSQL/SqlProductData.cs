@@ -33,7 +33,9 @@ public class SqlProductData : IProductData
     //.FirstOrDefault();
     public IEnumerable<Product> GetProducts(ProductFilter? Filter = null)
     {
-        IQueryable<Product> query = _db.Products;
+        IQueryable<Product> query = _db.Products
+            .Include(x => x.Brand)
+            .Include(x => x.Section);
 
         if (Filter?.Ids.Length > 0)
         {
