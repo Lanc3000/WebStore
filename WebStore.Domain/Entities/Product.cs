@@ -17,7 +17,7 @@ public class Product : NamedEntity, IOrderedEntity
     public int? BrandId { get; set; }
 
     [ForeignKey(nameof(BrandId))]
-    public Brand Brand { get; set; }
+    public Brand? Brand { get; set; }
     public string ImageUrl { get; set; }
 
     [Column(TypeName = "decimal(18,2)")]
