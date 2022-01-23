@@ -1,9 +1,11 @@
 ﻿using WebStore.Data;
 using WebStore.Domain;
 using WebStore.Domain.Entities;
+using WebStore.Services.Interfaces;
 
-namespace WebStore.Services.Interfaces;
+namespace WebStore.Services.InMemory;
 
+[Obsolete("Используйте класс WEbStore.Services.InSQL.SqlProductData", error: true)]
 public class InMemoryProductData : IProductData
 {
     public IEnumerable<Brand> GetBrands() => TestData.Brands;

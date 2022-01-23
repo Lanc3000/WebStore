@@ -1,8 +1,11 @@
-using WebStore.Infrastructure.Conventions;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using WebStore.DAL.Context;
+using WebStore.Domain.Entities.Identity;
 using WebStore.Infrastructure.Middleware;
-using WebStore.Models;
 using WebStore.Services;
 using WebStore.Services.Abstract;
+using WebStore.Services.InSQL;
 using WebStore.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,10 +21,59 @@ var services = builder.Services;
 //services.AddTransient<IEmployeeRepository, EmployeeRepository>();
 services.AddControllersWithViews();
 
-services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
-services.AddSingleton<IProductData, InMemoryProductData>();
+services.AddDbContext<WebStoreDB>(opt =>
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
+services.AddTransient<IDbInitializer, DbInitializer>();
 
-var app = builder.Build();
+
+services.AddIdentity<User, Role>()
+    .AddEntityFrameworkStores<WebStoreDB>()
+    .AddDefaultTokenProviders();
+
+services.Configure<IdentityOptions>(opt => 
+{
+#if DEBUG
+    opt.Password.RequireDigit = false;
+    opt.Password.RequireLowercase = false;
+    opt.Password.RequireUppercase = false;
+    opt.Password.RequireNonAlphanumeric = false;
+    opt.Password.RequiredLength = 3;
+    opt.Password.RequiredUniqueChars = 3;
+#endif
+    opt.User.RequireUniqueEmail = false;
+    opt.User.AllowedUserNameCharacters = "abcdefghijklmnoprstuvwxyzABCDEFGHIJKLMNOPRSTUVWXYZ123456789";
+    opt.Lockout.AllowedForNewUsers = false;
+    opt.Lockout.MaxFailedAccessAttempts = 10;
+    opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+});
+
+services.ConfigureApplicationCookie(opt =>
+{
+    opt.Cookie.Name = "WebStore.GB";
+    opt.Cookie.HttpOnly = true;
+
+    opt.ExpireTimeSpan = TimeSpan.FromDays(10);
+    // opt.Cookie.Expiration = TimeSpan.FromDays(10); - устарел и больше не используется
+
+    opt.LoginPath = "/Accaunt/Login";
+    opt.LogoutPath = "/Accaunt/Logout";
+    opt.AccessDeniedPath = "/Accaunt/AccessDenied";
+
+    opt.SlidingExpiration = true;
+});
+
+//services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
+//services.AddSingleton<IProductData, InMemoryProductData>();
+services.AddScoped<IProductData, SqlProductData>();
+services.AddScoped<IEmployeesData, SqlEmployeeData>();
+
+var app = builder.Build(); // Сборка приложения
+
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var db_initializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+    await db_initializer.InitializeAsync(RemoveBefore: false);
+}
 
 if (app.Environment.IsDevelopment())
 {
@@ -33,6 +85,9 @@ if (app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseMiddleware<TestMiddleware>(); // добаление промежуточного ПО более сложный способ
 
