@@ -5,6 +5,7 @@ using WebStore.Domain.Entities.Identity;
 using WebStore.Infrastructure.Middleware;
 using WebStore.Services;
 using WebStore.Services.Abstract;
+using WebStore.Services.InCookies;
 using WebStore.Services.InSQL;
 using WebStore.Services.Interfaces;
 
@@ -66,6 +67,7 @@ services.ConfigureApplicationCookie(opt =>
 //services.AddSingleton<IProductData, InMemoryProductData>();
 services.AddScoped<IProductData, SqlProductData>();
 services.AddScoped<IEmployeesData, SqlEmployeeData>();
+services.AddScoped<ICartService, InCookiesCartService>();
 
 var app = builder.Build(); // Сборка приложения
 

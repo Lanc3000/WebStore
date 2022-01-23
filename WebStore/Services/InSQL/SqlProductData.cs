@@ -35,11 +35,18 @@ public class SqlProductData : IProductData
     {
         IQueryable<Product> query = _db.Products;
 
-        if (Filter?.SectionId is { } section_id)
-            query = query.Where(p => p.SectionId == section_id);
+        if (Filter?.Ids.Length > 0)
+        {
+            query = query.Where(p => Filter.Ids!.Contains(p.Id));
+        }
+        else
+        {
+            if (Filter?.SectionId is { } section_id)
+                query = query.Where(p => p.SectionId == section_id);
 
-        if (Filter?.BrandId is { } brand_id)
-            query = query.Where(p => p.BrandId == brand_id);
+            if (Filter?.BrandId is { } brand_id)
+                query = query.Where(p => p.BrandId == brand_id);
+        }
 
         return query;
     }
