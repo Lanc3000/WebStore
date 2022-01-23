@@ -78,7 +78,7 @@ public class AccauntController : Controller
     public async Task<IActionResult> Logout() 
     {
         await _signInManager.SignOutAsync().ConfigureAwait(true);
-        return RedirectToAction("Index", "HomeController");
+        return RedirectToAction("Index", "Home");
     }  
     public IActionResult AccessDenied() => View();
 }
