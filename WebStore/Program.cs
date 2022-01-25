@@ -104,8 +104,17 @@ app.MapGet("/throw", () =>
     throw new ApplicationException("Ошибка в программе.");
 });
 
-//app.MapDefaultControllerRoute(); - определение стандартного маршрута (внизу сейчас написано тоже самое)
-app.MapControllerRoute(name: "default",
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+      name: "areas",
+      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+    );
+    //app.MapDefaultControllerRoute(); - определение стандартного маршрута (внизу сейчас написано тоже самое)
+    app.MapControllerRoute(name: "default",
                        pattern: "{controller=Home}/{action=Index}/{id?}");
+});
+
+
 
 app.Run();
