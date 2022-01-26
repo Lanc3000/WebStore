@@ -77,6 +77,8 @@ await using (var scope = app.Services.CreateAsyncScope())
     await db_initializer.InitializeAsync(RemoveBefore: false);
 }
 
+//app.Urls.Add("http://+:80"); // - если хочется обеспечить видимость приложения в локальной сети
+
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
@@ -99,20 +101,21 @@ app.UseWelcomePage("/welcome");
 //var props = configuration["CustomParam"];
 //app.MapGet("/", () => app.Configuration["CustomParam"]);
 
-app.MapGet("/throw", () =>
-{
-    throw new ApplicationException("Ошибка в программе.");
-});
+//app.MapGet("/throw", () =>
+//{
+//    throw new ApplicationException("Ошибка в программе.");
+//});
 
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
-      name: "areas",
-      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+        name: "areas",
+        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
     );
-    //app.MapDefaultControllerRoute(); - определение стандартного маршрута (внизу сейчас написано тоже самое)
-    app.MapControllerRoute(name: "default",
-                       pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
 });
 
 
