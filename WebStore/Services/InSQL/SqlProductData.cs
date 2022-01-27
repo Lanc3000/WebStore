@@ -14,6 +14,47 @@ public class SqlProductData : IProductData
     {
         _db = db;
     }
+
+    public Product CreateProduct(
+        string Name, 
+        int Order, 
+        decimal Price, 
+        string ImageUrl, 
+        string Section, 
+        string? Brand = null)
+    {
+        //var section = _db.Sections.FirstOrDefault(s => s.Name == Section);
+        //if (section is null) 
+        //{
+        //    section = new Section { Name = Name };
+        //}
+        var section = _db.Sections.FirstOrDefault(s => s.Name == Section)
+            ?? new Section { Name = Section };
+        var brand = Brand is { Length: > 0 }
+            ? _db.Brands.FirstOrDefault(s => s.Name == Brand)
+            ?? new Brand { Name = Brand }
+            : null;
+
+        var product = new Product
+        {
+            Name = Name,
+            Price = Price,
+            Order = Order,
+            ImageUrl = ImageUrl,
+            Section = section,
+            Brand = brand,
+        };
+
+        _db.Products.Add(product);
+        _db.SaveChanges();
+
+        return product;
+    }
+
+    public Brand? GetBrandById(int Id) => _db.Brands
+        .Include(b => b.Products)
+        .FirstOrDefault(b => b.Id == Id);
+
     public IEnumerable<Brand> GetBrands() => _db.Brands;
 
     public Product? GetProductById(int id) => _db.Products
@@ -52,6 +93,10 @@ public class SqlProductData : IProductData
 
         return query;
     }
+
+    public Section? GetSectionById(int Id) => _db.Sections
+        .Include(s => s.Products)
+        .FirstOrDefault(s => s.Id == Id);
 
     public IEnumerable<Section> GetSections() => _db.Sections;
 }
