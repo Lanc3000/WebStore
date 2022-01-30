@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using WebStore.Domain.Entities;
-using WebStore.Mapping;
+using WebStore.Infrastructure.Mapping;
 using WebStore.Services.Interfaces;
 using WebStore.ViewModels;
 
