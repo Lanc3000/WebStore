@@ -1,6 +1,6 @@
 ﻿using WebStore.Domain.Entities;
 
-namespace WebStore.Services.Abstract;
+namespace WebStore.Services.Interfaces;
 /// <summary>
 /// Основные круд оперции для модели Employee
 /// </summary>
