@@ -1,8 +1,8 @@
 ﻿using WebStore.Data;
-using WebStore.Models;
+using WebStore.Domain.Entities;
 using WebStore.Services.Abstract;
 
-namespace WebStore.Services;
+namespace WebStore.Services.InMemory;
 
 public class InMemoryEmployeesData : IEmployeesData
 {

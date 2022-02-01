@@ -1,8 +1,9 @@
-using WebStore.Infrastructure.Conventions;
+using Microsoft.EntityFrameworkCore;
+using WebStore.DAL.Context;
 using WebStore.Infrastructure.Middleware;
-using WebStore.Models;
 using WebStore.Services;
 using WebStore.Services.Abstract;
+using WebStore.Services.InSQL;
 using WebStore.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,10 +19,22 @@ var services = builder.Services;
 //services.AddTransient<IEmployeeRepository, EmployeeRepository>();
 services.AddControllersWithViews();
 
-services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
-services.AddSingleton<IProductData, InMemoryProductData>();
+services.AddDbContext<WebStoreDB>(opt =>
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
+services.AddTransient<IDbInitializer, DbInitializer>();
 
-var app = builder.Build();
+//services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
+//services.AddSingleton<IProductData, InMemoryProductData>();
+services.AddScoped<IProductData, SqlProductData>();
+services.AddScoped<IEmployeesData, SqlEmployeeData>();
+
+var app = builder.Build(); // Сборка приложения
+
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var db_initializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+    await db_initializer.InitializeAsync(RemoveBefore: false);
+}
 
 if (app.Environment.IsDevelopment())
 {
